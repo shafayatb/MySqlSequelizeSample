@@ -25,8 +25,6 @@ const createSendToken = (user, message, statusCode, res) => {
   res.cookie('jwt', token, cookieOptions);
 
   user.password = undefined;
-  user.createdAt = undefined;
-  user.updatedAt = undefined;
 
   res.status(statusCode).json({
     status: true,
@@ -61,5 +59,5 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
 
-  createSendToken(user, 'Logged In Successfully', 200, res);
+  createSendToken(user.toJSON(), 'Logged In Successfully', 200, res);
 });

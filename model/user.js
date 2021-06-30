@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const _ = require('lodash');
 const sequelize = require('../sequelizeConn');
 
 const User = sequelize.define('user', {
@@ -30,6 +31,14 @@ User.prototype.correctPassword = async function (
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+User.prototype.toJSON = function () {
+  const values = {
+    ..._.omit(this.get(), ['createdAt', 'updatedAt']),
+  };
+
+  return values;
 };
 
 const createUsers = async () => {
